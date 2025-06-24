@@ -63,26 +63,15 @@ RUN apt-get update -y && \
         fontconfig \
         fonts-ipafont-gothic \
         fonts-ipafont-mincho \
-        subversion \
-        && \
+        curl && \
     rm -rf /var/lib/apt/lists/* && apt-get clean && \
-    cd /usr/share/fonts/truetype && \
-    for font in \
-      https://github.com/google/fonts/trunk/apache/droidsansmono \
-      https://github.com/google/fonts/trunk/apache/droidsans \
-      https://github.com/google/fonts/trunk/apache/droidserif \
-      https://github.com/google/fonts/trunk/apache/roboto \
-      https://github.com/google/fonts/trunk/apache/opensans \
-      https://github.com/google/fonts/trunk/ofl/gravitasone \
-      https://github.com/google/fonts/trunk/ofl/oldstandardtt \
-      https://github.com/google/fonts/trunk/ofl/ptsansnarrow \
-      https://github.com/google/fonts/trunk/ofl/raleway \
-      https://github.com/google/fonts/trunk/ofl/overpass \
-    ; do \
-      svn checkout $font ; \
-    done && \
-    mkdir /usr/share/fonts/user && \
-    fc-cache -fv && apt-get --auto-remove -y remove subversion
+    mkdir -p /usr/share/fonts/truetype/user && \
+    cd /usr/share/fonts/truetype/user && \
+    curl -L -O https://github.com/google/fonts/raw/main/apache/roboto/Roboto-Regular.ttf && \
+    curl -L -O https://github.com/google/fonts/raw/main/apache/opensans/OpenSans-Regular.ttf && \
+    curl -L -O https://github.com/google/fonts/raw/main/ofl/raleway/Raleway-Regular.ttf && \
+    fc-cache -fv
+
 
 ####################
 # Download mathjax (same version as plotly.js extras/)
