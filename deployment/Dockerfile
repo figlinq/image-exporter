@@ -121,6 +121,7 @@ WORKDIR /var/www/image-exporter
 RUN npm install && mkdir build
 COPY bin /var/www/image-exporter/bin
 COPY src /var/www/image-exporter/src
+COPY custom/plotlyjs-bundle.js /var/www/image-exporter/build/plotly-bundle.js
 
 ####################
 # Add entrypoint script
@@ -132,4 +133,4 @@ RUN ln -s /entrypoint.sh /usr/bin/orca
 
 EXPOSE 9091
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["--mathjax", "/mathjax/MathJax.js", "--topojson", "/plotly-geo-assets.js"]
+CMD ["--plotlyJS", "/var/www/image-exporter/build/plotly-bundle.js", "--mathjax", "/mathjax/MathJax.js", "--topojson", "/plotly-geo-assets.js"]
