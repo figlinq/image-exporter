@@ -1,0 +1,9 @@
+Streambed source: integration-9.1.1 at 6dcf29b5cbbb4997dd7a9aaf562a408fe11c6bf4 (2026-11-17, Merge pull request #943).
+  Built from 781260a97 (PR 928, merged into integration-9.1.1); shelly/plotlyjs, package.json and yarn.lock are identical
+  at both commits (git diff --quiet), so a rebuild from 6dcf29b5c or the 9.1.0 tag gives the same input
+  (the 9.1.1 work was folded into the 9.1.0 release).
+Lockfile: yarn.lock (Streambed uses yarn, there is no package-lock.json for this bundle)
+  sha256 464771e03f3c4c4258619f89767c2e6ebdf07b5b8dda22130500e777adecb584, git blob 3b6bb5bab17771f0205b49884639278dca3fc64a;
+  node_modules installed from that lockfile (yarn install --frozen-lockfile): plotly.js 2.29.1, webpack 5.90.3.
+Built: 2026-11-17, node v20.6.1 (shelly/plotlyjs/bin/bundle.js, minified file)
+sha256: 08d97ba042fd2c7efbc13fbba66b2c44c6169440d5f6871db081a185ec709237  custom/plotlyjs-bundle.js
