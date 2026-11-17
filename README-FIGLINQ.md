@@ -1,6 +1,6 @@
 # Figlinq image exporter
 
-Image tag: `figlinq/image-exporter:v5` (Streambed 9.1.1). Previous: `v4` (2025-11-21).
+Image tag: `figlinq/image-exporter:v5` (Streambed 9.1.0). Previous: `v4` (2025-11-21).
 
 ## What v5 contains
 
@@ -47,8 +47,10 @@ need the owner's go.
 
 ## Pinning by digest
 
-`v5` is a tag, and a tag can be pushed again. After the push, record the digest the registry
-returned and pin installations to it:
+`v5` is a tag, and a tag can be pushed again. The published image is built from the merged
+`main` commit of this repository (never from a pull request branch), from a clean checkout of
+that commit. After the push, record the digest the registry returned and pin installations to
+it:
 
 ```
 docker push figlinq/image-exporter:v5
@@ -56,8 +58,8 @@ docker inspect --format '{{index .RepoDigests 0}}' figlinq/image-exporter:v5
 # -> figlinq/image-exporter@sha256:<digest>
 ```
 
-- Write the digest under "Published digests" below, with the date and the commit of this
-  repository it was built from.
+- Write the digest under "Published digests" below, next to the `main` commit it was built
+  from and the date: `v5`: `sha256:<digest>`, built from `main` at `<commit>`, `<date>`.
 - In Streambed, reference the image as `figlinq/image-exporter:v5@sha256:<digest>` (Compose and
   Podman pull the digest and ignore the tag, which stays for readers). An instance can check
   what it runs with `docker image inspect --format '{{.RepoDigests}}' figlinq/image-exporter:v5`.
