@@ -67,7 +67,10 @@ docker inspect --format '{{index .RepoDigests 0}}' figlinq/image-exporter:v5
 
 ### Published digests
 
-- `v5`: not published yet (needs the owner's go).
+- `v5`: `sha256:1f29b448846bd8f92d21666dca62fcf141c38076062699d8a247f48a48e2441f` (index),
+  built from `main` at `2d3c49dd5`, published 2026-11-17 by the owner. linux/amd64 manifest:
+  `sha256:41285866486cd32c408140ae529c117f22d37f2aa3b519dd4ea55c63ed2e215d`. Streambed pins the
+  index digest: `figlinq/image-exporter:v5@sha256:1f29b448846bd8f92d21666dca62fcf141c38076062699d8a247f48a48e2441f`.
 
 ## Development notes
 
