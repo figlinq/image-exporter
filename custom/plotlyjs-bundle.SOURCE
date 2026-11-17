@@ -1,0 +1,3 @@
+Streambed commit: 781260a97 (branch figure-ops-fixes = integration-9.1.1 + PR 928; shelly/plotlyjs identical to integration-9.1.1)
+Built: 2026-11-17, node v20.6.1, plotly.js 2.29.1, webpack 5.90.3 (shelly/plotlyjs/bin/bundle.js, minified file)
+sha256: 08d97ba042fd2c7efbc13fbba66b2c44c6169440d5f6871db081a185ec709237  custom/plotlyjs-bundle.js

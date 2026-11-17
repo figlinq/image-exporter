@@ -56,7 +56,16 @@ RUN ARCH= && dpkgArch="$(dpkg --print-architecture)" \
   && npm --version
 
 ####################
-# Download fonts
+# Fonts
+#
+# Open Sans 3.000 (SIL Open Font License 1.1, custom/fonts/OpenSans/OFL.txt): the
+# same TTF files the Figlinq web app serves to the plot editor, so a plot is laid
+# out here with the font it is drawn with in the browser (plotly's default font
+# list starts with 'Open Sans'). Vendored with SHA256SUMS and checked at build
+# time. Liberation (Arial/Times/Courier metrics) and DejaVu stay as fallbacks.
+# The former unpinned downloads from github.com/google/fonts (Roboto, Open Sans,
+# Raleway) answered 404, so those fonts were never installed.
+# /usr/share/fonts/user stays free for fonts mounted at run time (run_server).
 
 RUN apt-get update -y && \
     apt-get install -y \
@@ -64,13 +73,13 @@ RUN apt-get update -y && \
         fonts-ipafont-gothic \
         fonts-ipafont-mincho \
         curl && \
-    rm -rf /var/lib/apt/lists/* && apt-get clean && \
-    mkdir -p /usr/share/fonts/truetype/user && \
-    cd /usr/share/fonts/truetype/user && \
-    curl -L -O https://github.com/google/fonts/raw/main/apache/roboto/Roboto-Regular.ttf && \
-    curl -L -O https://github.com/google/fonts/raw/main/apache/opensans/OpenSans-Regular.ttf && \
-    curl -L -O https://github.com/google/fonts/raw/main/ofl/raleway/Raleway-Regular.ttf && \
-    fc-cache -fv
+    rm -rf /var/lib/apt/lists/* && apt-get clean
+
+COPY custom/fonts/OpenSans /usr/share/fonts/truetype/open-sans
+RUN cd /usr/share/fonts/truetype/open-sans && \
+    sha256sum -c SHA256SUMS && \
+    fc-cache -f && \
+    fc-list : family | grep -qx 'Open Sans'
 
 
 ####################
@@ -113,7 +122,8 @@ COPY deployment/ImageMagickPolicy.xml /etc/ImageMagick-6/policy.xml
 # Copy and set up Orca
 
 RUN apt-get update && apt-get install -y chromium-browser fonts-liberation xvfb poppler-utils git libxss1 \
-    && rm -rf /var/lib/apt/lists/* && apt-get clean
+    && rm -rf /var/lib/apt/lists/* && apt-get clean \
+    && fc-cache -f
 
 COPY package.json /var/www/image-exporter/
 COPY package-lock.json /var/www/image-exporter/
