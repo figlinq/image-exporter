@@ -19,15 +19,20 @@ Image tag: `figlinq/image-exporter:v5` (Streambed 9.1.1). Previous: `v4` (2025-1
 ## Updating the plotly.js bundle
 
 All js must run in the orca Electron (6.1, Chromium 76): the bundle is transpiled to ES5 by
-plotly.js's webpack config. From a Streambed checkout of the release (Node 20, `npm ci` done):
+plotly.js's webpack config. From a Streambed checkout of the release branch or tag (Node 20,
+`yarn install --frozen-lockfile` done; the entry path must be absolute, or webpack takes it for
+a module name):
 
 ```
-node shelly/plotlyjs/bin/bundle.js shelly/plotlyjs/static/plotlyjs/src/plotly.js \
+node shelly/plotlyjs/bin/bundle.js "$PWD/shelly/plotlyjs/static/plotlyjs/src/plotly.js" \
     /tmp/plotlyjs-bundle-unmin.js /tmp/plotlyjs-bundle.js
 cp /tmp/plotlyjs-bundle.js <image-exporter>/custom/plotlyjs-bundle.js
 ```
 
-Record the Streambed commit and the bundle's sha256 in `custom/plotlyjs-bundle.SOURCE`.
+Record in `custom/plotlyjs-bundle.SOURCE`: the Streambed release branch (or tag) and commit,
+the sha256 of Streambed's `yarn.lock` (the webpack output is reproducible only with the same
+`node_modules`), the Node, plotly.js and webpack versions, and the bundle's sha256. Cite the
+release branch or tag, not a feature branch. v5: integration-9.1.1 at `6dcf29b5c`.
 
 ## Build and check
 
@@ -40,9 +45,35 @@ Publishing the image and moving the tag in Streambed (`deploy/compose/compose.ym
 `docker-compose/dev/docker-compose.yml`, `deploy/testing/manager.py`) are release steps that
 need the owner's go.
 
+## Pinning by digest
+
+`v5` is a tag, and a tag can be pushed again. After the push, record the digest the registry
+returned and pin installations to it:
+
+```
+docker push figlinq/image-exporter:v5
+docker inspect --format '{{index .RepoDigests 0}}' figlinq/image-exporter:v5
+# -> figlinq/image-exporter@sha256:<digest>
+```
+
+- Write the digest under "Published digests" below, with the date and the commit of this
+  repository it was built from.
+- In Streambed, reference the image as `figlinq/image-exporter:v5@sha256:<digest>` (Compose and
+  Podman pull the digest and ignore the tag, which stays for readers). An instance can check
+  what it runs with `docker image inspect --format '{{.RepoDigests}}' figlinq/image-exporter:v5`.
+- Never push a different build under an existing tag: make a new tag (`v5.1`, `v6`).
+
+### Published digests
+
+- `v5`: not published yet (needs the owner's go).
+
 ## Development notes
 
-Note: All js must be Node 8 compatible.
+Note: three runtimes. `bin/orca.js` (the launcher) and `npm install` run on the image's Node
+8.17 (`NODE_VERSION` in `deployment/Dockerfile`), so that code must stay Node 8 compatible. The
+Electron app it starts (`src/app`) runs in Electron 6.1 (Node 12). Code in the rendered page (the
+plotly.js bundle, `src/component`) runs in Chromium 76 and is shipped as ES5 (see "Updating the
+plotly.js bundle").
 
 TODO:
 
